@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<title>רמזורים 2021</title>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+	<script src="leaflet.ajax.min.js"></script>	
+	<link rel="icon" href="https://mot-roundtbl.org.il/wp-content/uploads/2020/10/favicon-16x16-1.png" sizes="32x32">
+	<style>
+		html, body {
+			height: 100%;
+			margin: 0;
+		}
+		#map {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+		}
+		.leaflet-popup{
+			direction:rtl;
+		}
+		.legend {
+			direction: rtl;
+			text-align: right;
+			line-height: 18px;
+			color: #555;
+			padding: 6px 8px;
+			background: rgba(255,255,255,0.8);
+		}
+		.legend i {
+			width: 18px;
+			height: 18px;
+			float: right;
+			margin-left: 8px;
+			opacity: 0.7;
+		}
+	</style>
+
+	
+</head>
+<body>
+
+<div id='map'></div>
+<script src="ll_script.js"></script>	
+
+</body>
+</html>
