@@ -14,24 +14,15 @@ var baseMaps = {
 	"Mapbox": tiles
 };
 
-var geojsonMarkerOptions = {
-    radius: 8,
-    fillColor: "#ff7800",
-    color: "#000",
-    weight: 1,
-    opacity: 1,
-    fillOpacity: 0.8
-};
 
-var geojson1 = new L.GeoJSON.AJAX("./data/ramzor2021.geojson", {
-	style: geojsonMarkerOptions
-	/*style:{color: '#ffaaaa'},  // ,weight:2,fillOpacity: 0
+var geojson1 = new L.GeoJSON.AJAX("./data/ramzor2021.geojson", {	
+	style:{color: '#ffaaaa'},  // ,weight:2,fillOpacity: 0
 	onEachFeature: function(feature, layer) {
 		if (feature.properties) {
 				var popupcontent = '2021<br>'+'יישוב:' + feature.properties.city + ' <br> צומת:'+feature.properties.TzName;
 				layer.bindPopup(popupcontent);
 				}
-		}*/
+		}
 	});
 geojson1.addTo(map);
 
