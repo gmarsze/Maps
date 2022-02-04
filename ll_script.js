@@ -21,7 +21,7 @@ var geojsonMarkerOptions = {
     weight: 1,
     opacity: 1,
     fillOpacity: 0.8
-};
+}
 
 var geojson1 = new L.GeoJSON.AJAX("./data/ramzor2021.geojson",{
 	style: geojsonMarkerOptions;
