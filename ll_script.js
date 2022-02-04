@@ -14,7 +14,7 @@ var baseMaps = {
 	"Mapbox": tiles
 };
 
-var geojson1 = new L.GeoJSON.AJAX("./data/ramzor2021.geojson",{
+var geojson1 = new L.GeoJSON.AJAX("data/ramzor2021.geojson",{
 	style:{color: '#ffaaaa'},  // ,weight:2,fillOpacity: 0
 	onEachFeature: function(feature, layer) {
 		if (feature.properties) {
