@@ -1,22 +1,71 @@
-var map = L.map('map').setView([31.5, 35], 7);
+// ramzor map
 
+var geojsonMarkerOptions = {
+    radius: 6,
+    fillColor: "#FF0000", //"#ff7800",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+};
 
-var tiles = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+// ---------------------------------------------
+
+// https://drustack.github.io/Leaflet.SyncView/
+const mapproperties = {
+	initial_lon: 32.06744693937369,
+	initial_lat: 34.82906341552735,
+	initial_zm: 13 
+}
+
+const mapbox = {
+	connect: 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw',
 	maxZoom: 18,
 	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
 		'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 	id: 'mapbox/light-v9',
 	tileSize: 512,
 	zoomOffset: -1
+};
+
+const osm = {
+		connect: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', 
+		maxZoom: 18
+		};
+const osm_dark = {
+		connect: 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', 
+		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+        };
+
+const lyr = { 
+	url: "https://gmarsze.github.io/Maps/data/ramzor2021.geoJson",
+	//style: geojsonMarkerOptions, // {color: '#ffaaaa'},  // ,weight:2,fillOpacity: 0
+	popup: '2021<br>' //+ 'יישוב:' + feature.properties.city + ' <br> צומת:'+feature.properties.TzName
+}
+
+// -----------------------------------------
+var provider = mapbox ;
+
+var map = L.map('map',{zoomControl: false}).setView([mapproperties.initial_lon, mapproperties.initial_lat], mapproperties.initial_zm);
+var zoom_bar = new L.Control.ZoomBar({position: 'topright'}).addTo(map);
+
+var tiles = L.tileLayer(provider.connect, {
+	maxZoom: provider.maxZoom,
+	attribution: provider.attribution,
+	id: provider.id,
+	tileSize: provider.tileSize,
+	zoomOffset: provider.zoomOffset
 }).addTo(map);
 
 var baseMaps = {
 	"Mapbox": tiles
 };
 
-
-var geojson1 = new L.GeoJSON.AJAX("./data/ramzor2021.geojson", {	
-	style:{color: '#ffaaaa'},  // ,weight:2,fillOpacity: 0
+var geojson1 = new L.GeoJSON.AJAX(lyr.url, {	
+	//style: lyr.style, 
+	pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, geojsonMarkerOptions);
+		},
 	onEachFeature: function(feature, layer) {
 		if (feature.properties) {
 				var popupcontent = '2021<br>'+'יישוב:' + feature.properties.city + ' <br> צומת:'+feature.properties.TzName;
