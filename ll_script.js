@@ -1,7 +1,11 @@
 // ramzor map
 
+var selectedtheme = 0 ;
+
+// -----------------------------------
+
 const redcircle = {
-    radius: 5,
+    radius: 4,
     fillColor: "#FF0000", // red   //"#ff7800" - orange,
     color: "#000",
     weight: 1,
@@ -10,6 +14,19 @@ const redcircle = {
 };
 const violetcircle = Object.assign({}, redcircle);
 violetcircle.fillColor = "#EE82EE";
+
+const yellowcircle = Object.assign({}, redcircle);
+yellowcircle.fillColor = "#FFFF00";
+
+const kikar = {
+    radius: 4,
+    fillColor: "#FFFFFF", // white 
+    color: "#9400D3",  // violet
+    weight: 2,
+    opacity: 1,
+    fillOpacity: 0.3
+};
+
 
 // ------------------------------------------------------------------------
 
@@ -20,7 +37,7 @@ const mapproperties = {
 	initial_zm: 13 
 }
 
-const mapbox = {
+const mapboxlight = {
 	connect: 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw',
 	maxZoom: 18,
 	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
@@ -29,6 +46,8 @@ const mapbox = {
 	tileSize: 512,
 	zoomOffset: -1
 };
+const mapboxstreets = Object.assign({}, mapboxlight);
+mapboxstreets.id = 'mapbox/streets-v11';
 
 const osm = {
 		connect: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', 
@@ -39,25 +58,57 @@ const osm_dark = {
 		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
         };
 
+var provider = mapboxlight ;
+var mapboxlighttiles = L.tileLayer(provider.connect, {
+	maxZoom: provider.maxZoom,
+	attribution: provider.attribution,
+	id: provider.id,
+	tileSize: provider.tileSize,
+	zoomOffset: provider.zoomOffset
+}) ;
+
+var provider = mapboxstreets ;
+var mapboxstreetstiles = L.tileLayer(provider.connect, {
+	maxZoom: provider.maxZoom,
+	attribution: provider.attribution,
+	id: provider.id,
+	tileSize: provider.tileSize,
+	zoomOffset: provider.zoomOffset
+}) ;
+
+//  see https://leafletjs.com/examples/wms/wms.html
+var baseMaps = {
+	"רקע צבעוני": mapboxstreetstiles,
+	"רקע אפור": mapboxlighttiles 
+};
+
 // -----------------------------------------------
 
 const lyr1 = { 
+	name: "רמזורים - סוף 2021",
 	url: "https://gmarsze.github.io/Maps/data/ramzor2021.geoJson",
 	style: redcircle,
 	popup: function(feature, layer) {
 		if (feature.properties) {
-				var popupcontent = '2021<br>'+'יישוב:' + feature.properties.city + ' <br> צומת:'+feature.properties.TzName;
+				var popupcontent = 'רמזור<br>'+'יישוב: ' + feature.properties.city ;
+				if (feature.properties.TzName!=null)    { popupcontent = popupcontent + '<br> צומת: '+feature.properties.TzName ;} ;
+				if (feature.properties.streets!=null)   { popupcontent = popupcontent + '<br> רחובות: '+feature.properties.streets } ;
+				if (feature.properties.Authority!=null) { popupcontent = popupcontent + '<br> רשות תמרור: '+feature.properties.Authority };
 				layer.bindPopup(popupcontent);
-				}
+				}  //{ "mahoz","semel","city","nrashut","TzName","streets","Authority","new"}
 	}	
-}
+}  
 
 const lyr2 = { 
+	name: "מעגלי תנועה - סוף 2021",
 	url: "https://gmarsze.github.io/Maps/data/kikar2021.geoJson",
-	style: violetcircle,
+	style: kikar, // yellowcircle,
 	popup: function(feature, layer) {
 		if (feature.properties) {
-				var popupcontent = '2021<br>'+'יישוב:' + feature.properties.city + ' <br> צומת:'+feature.properties.TzName;
+				var popupcontent = 'מעגל תנועה<br>'+'יישוב: ' + feature.properties.city ;
+				if (feature.properties.TzName!=null)    { popupcontent = popupcontent + '<br> צומת: '+feature.properties.TzName ;} ;
+				if (feature.properties.streets!=null)   { popupcontent = popupcontent + '<br> רחובות: '+feature.properties.streets } ;
+				if (feature.properties.Authority!=null) { popupcontent = popupcontent + '<br> רשות תמרור: '+feature.properties.Authority };
 				layer.bindPopup(popupcontent);
 				}
 	}	
@@ -65,30 +116,43 @@ const lyr2 = {
 
 // -----------------------------------------
 
-var provider = mapbox ;
-
 // var map = L.map('map',{zoomControl: false}).setView([mapproperties.initial_lon, mapproperties.initial_lat], mapproperties.initial_zm);
 // var zoom_bar = new L.Control.ZoomBar({position: 'topright'}).addTo(map);
 
 var map = L.map('map').setView([mapproperties.initial_lon, mapproperties.initial_lat], mapproperties.initial_zm);
 L.Control.boxzoom({ position:'topleft' }).addTo(map);
 
-var tiles = L.tileLayer(provider.connect, {
-	maxZoom: provider.maxZoom,
-	attribution: provider.attribution,
-	id: provider.id,
-	tileSize: provider.tileSize,
-	zoomOffset: provider.zoomOffset
-}).addTo(map);
 
-/*var baseMaps = {
-	"Mapbox": tiles
-};*/
+mapboxstreetstiles.addTo(map);
 
-addlyr(map, lyr1) ;
-addlyr(map, lyr2) ;
 
-function addlyr (map, lyr) {
+var domainTheme = {};
+domainTheme.radius = [ 0, 3, 7 ];
+domainTheme.fillColor = [ 0, "#FFFF00", "#FF0000" ];
+
+var overlayMaps = {};
+addlyr(map, lyr1, overlayMaps) ;
+addlyr(map, lyr2, overlayMaps) ;
+
+
+/*
+function addlyr (map, lyr, overlaysObj) {
+	var geojson1 = new L.GeoJSON.AJAX(lyr.url, {	
+		pointToLayer: function (feature, latlng) {
+		//x = domainTheme;
+			var thstyle = Object.assign({}, lyr.style);
+			thstyle.radius  = domainTheme.radius[feature.properties.domain]
+			thstyle.fillColor  = domainTheme.fillColor[feature.properties.domain]
+			return L.circleMarker(latlng, thstyle);
+			},
+		onEachFeature: lyr.popup
+		});
+	geojson1.addTo(map);
+	overlaysObj[lyr.name] = geojson1;
+}
+*/
+
+function addlyr (map, lyr, overlaysObj) {
 	var geojson1 = new L.GeoJSON.AJAX(lyr.url, {	
 		//style: lyr.style, 
 		pointToLayer: function (feature, latlng) {
@@ -97,20 +161,45 @@ function addlyr (map, lyr) {
 		onEachFeature: lyr.popup
 		});
 	geojson1.addTo(map);
+	overlaysObj[lyr.name] = geojson1;
 }
 
-// flds = { "mahoz","semel","city","nrashut","TzName","streets","Authority","new"
+L.control.layers(baseMaps, overlayMaps, {collapsed:false}).addTo(map);
 
 /*
-var overlayMaps = {
-	"שכבת מודל ארצי": geojson1,
-	"שכבת מודל באר שבע":geojson2,
-	"שכבת מודל חיפה":geojson3,
-	'שכבת מודל ירושלים - יו"ש':geojson4,
-	"שכבת נפות":geojson5,
-	"שכבת מודל תל אביב":geojson6
-};
-L.control.layers(baseMaps,overlayMaps).addTo(map);
+function maptheme(src) {
+	selectedtheme = src.value;	
+	alert(src.value);
+	
+	}
+
+function test(src) {
+	var x = 0; //to stop
+	//alert('hi')	
+
+	var z = map ;
+
+	var y = map.layers ;
+	
+	map.eachLayer(function(layer){
+		layer.bindPopup('Hello');
+	});
+
+	var layers = [];
+	map.eachLayer(function(layer) {
+		if( layer instanceof L.TileLayer )
+			layers.push(layer);
+	});
+
+	console.log(layers)
+	}
+
+*/	
+
+/*
+
+
+// ------------------------------------------------------------
 
 L.Control.Legend = L.Control.extend({
     onAdd: function(map) {
@@ -133,5 +222,5 @@ L.control.legend = function(opts) {
     return new L.Control.Legend(opts);
 }
 let legendControl = L.control.legend({ position: 'topright' }).addTo(map);
-
 */
+
