@@ -1,15 +1,17 @@
 // ramzor map
 
-var geojsonMarkerOptions = {
-    radius: 6,
-    fillColor: "#FF0000", //"#ff7800",
+const redcircle = {
+    radius: 5,
+    fillColor: "#FF0000", // red   //"#ff7800" - orange,
     color: "#000",
     weight: 1,
     opacity: 1,
     fillOpacity: 0.8
 };
+const violetcircle = Object.assign({}, redcircle);
+violetcircle.fillColor = "#EE82EE";
 
-// ---------------------------------------------
+// ------------------------------------------------------------------------
 
 // https://drustack.github.io/Leaflet.SyncView/
 const mapproperties = {
@@ -37,13 +39,32 @@ const osm_dark = {
 		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
         };
 
-const lyr = { 
+// -----------------------------------------------
+
+const lyr1 = { 
 	url: "https://gmarsze.github.io/Maps/data/ramzor2021.geoJson",
-	//style: geojsonMarkerOptions, // {color: '#ffaaaa'},  // ,weight:2,fillOpacity: 0
-	popup: '2021<br>' //+ 'יישוב:' + feature.properties.city + ' <br> צומת:'+feature.properties.TzName
+	style: redcircle,
+	popup: function(feature, layer) {
+		if (feature.properties) {
+				var popupcontent = '2021<br>'+'יישוב:' + feature.properties.city + ' <br> צומת:'+feature.properties.TzName;
+				layer.bindPopup(popupcontent);
+				}
+	}	
+}
+
+const lyr2 = { 
+	url: "https://gmarsze.github.io/Maps/data/kikar2021.geoJson",
+	style: violetcircle,
+	popup: function(feature, layer) {
+		if (feature.properties) {
+				var popupcontent = '2021<br>'+'יישוב:' + feature.properties.city + ' <br> צומת:'+feature.properties.TzName;
+				layer.bindPopup(popupcontent);
+				}
+	}	
 }
 
 // -----------------------------------------
+
 var provider = mapbox ;
 
 // var map = L.map('map',{zoomControl: false}).setView([mapproperties.initial_lon, mapproperties.initial_lat], mapproperties.initial_zm);
@@ -64,19 +85,19 @@ var tiles = L.tileLayer(provider.connect, {
 	"Mapbox": tiles
 };*/
 
-var geojson1 = new L.GeoJSON.AJAX(lyr.url, {	
-	//style: lyr.style, 
-	pointToLayer: function (feature, latlng) {
-        return L.circleMarker(latlng, geojsonMarkerOptions);
-		},
-	onEachFeature: function(feature, layer) {
-		if (feature.properties) {
-				var popupcontent = '2021<br>'+'יישוב:' + feature.properties.city + ' <br> צומת:'+feature.properties.TzName;
-				layer.bindPopup(popupcontent);
-				}
-		}
-	});
-geojson1.addTo(map);
+addlyr(map, lyr1) ;
+addlyr(map, lyr2) ;
+
+function addlyr (map, lyr) {
+	var geojson1 = new L.GeoJSON.AJAX(lyr.url, {	
+		//style: lyr.style, 
+		pointToLayer: function (feature, latlng) {
+			return L.circleMarker(latlng, lyr.style);
+			},
+		onEachFeature: lyr.popup
+		});
+	geojson1.addTo(map);
+}
 
 // flds = { "mahoz","semel","city","nrashut","TzName","streets","Authority","new"
 
