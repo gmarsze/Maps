@@ -46,8 +46,11 @@ const lyr = {
 // -----------------------------------------
 var provider = mapbox ;
 
-var map = L.map('map',{zoomControl: false}).setView([mapproperties.initial_lon, mapproperties.initial_lat], mapproperties.initial_zm);
-var zoom_bar = new L.Control.ZoomBar({position: 'topright'}).addTo(map);
+// var map = L.map('map',{zoomControl: false}).setView([mapproperties.initial_lon, mapproperties.initial_lat], mapproperties.initial_zm);
+// var zoom_bar = new L.Control.ZoomBar({position: 'topright'}).addTo(map);
+
+var map = L.map('map').setView([mapproperties.initial_lon, mapproperties.initial_lat], mapproperties.initial_zm);
+L.Control.boxzoom({ position:'topleft' }).addTo(map);
 
 var tiles = L.tileLayer(provider.connect, {
 	maxZoom: provider.maxZoom,
@@ -57,9 +60,9 @@ var tiles = L.tileLayer(provider.connect, {
 	zoomOffset: provider.zoomOffset
 }).addTo(map);
 
-var baseMaps = {
+/*var baseMaps = {
 	"Mapbox": tiles
-};
+};*/
 
 var geojson1 = new L.GeoJSON.AJAX(lyr.url, {	
 	//style: lyr.style, 
