@@ -85,7 +85,7 @@ var baseMaps = {
 // -----------------------------------------------
 
 const lyr1 = { 
-	name: "רמזורים - סוף 2021",
+	name: "צמתים מרומזרים - סוף 2021",
 	url: "https://gmarsze.github.io/Maps/data/ramzor2021.geoJson",
 	style: redcircle,
 	popup: function(feature, layer) {
