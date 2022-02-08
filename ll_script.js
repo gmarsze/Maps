@@ -1,4 +1,4 @@
-// ramzor map
+// ramzor map -v2
 
 var selectedtheme = 0 ;
 
@@ -85,7 +85,7 @@ var baseMaps = {
 // -----------------------------------------------
 
 const lyr1 = { 
-	name: "צמתים מרומזרים - סוף 2021",
+	name: "רמזורים - סוף 2021",
 	url: "https://gmarsze.github.io/Maps/data/ramzor2021.geoJson",
 	style: redcircle,
 	popup: function(feature, layer) {
@@ -122,16 +122,14 @@ const lyr2 = {
 var map = L.map('map').setView([mapproperties.initial_lon, mapproperties.initial_lat], mapproperties.initial_zm);
 L.Control.boxzoom({ position:'topleft' }).addTo(map);
 
-
 mapboxstreetstiles.addTo(map);
-
 
 var domainTheme = {};
 domainTheme.radius = [ 0, 3, 7 ];
 domainTheme.fillColor = [ 0, "#FFFF00", "#FF0000" ];
 
 var overlayMaps = {};
-addlyr(map, lyr1, overlayMaps) ;
+var sss = addlyr(map, lyr1, overlayMaps) ;
 addlyr(map, lyr2, overlayMaps) ;
 
 
@@ -153,7 +151,7 @@ function addlyr (map, lyr, overlaysObj) {
 */
 
 function addlyr (map, lyr, overlaysObj) {
-	var geojson1 = new L.GeoJSON.AJAX(lyr.url, {	
+	let geojson1 = new L.GeoJSON.AJAX(lyr.url, {	
 		//style: lyr.style, 
 		pointToLayer: function (feature, latlng) {
 			return L.circleMarker(latlng, lyr.style);
@@ -166,22 +164,95 @@ function addlyr (map, lyr, overlaysObj) {
 
 L.control.layers(baseMaps, overlayMaps, {collapsed:false}).addTo(map);
 
-/*
+// -------------------------------------------------
+
 function maptheme(src) {
 	selectedtheme = src.value;	
-	alert(src.value);
-	
+	//alert(src.value);
+
+	let xlyr1 = overlayMaps[lyr1.name]
+	let xlyr2 = overlayMaps[lyr2.name]
+
+
+	if (selectedtheme=="0") {
+		mapreset(xlyr1, redcircle);
+		mapreset(xlyr2, kikar);
 	}
+	else if (selectedtheme=="1") {
+		mapbyIU(xlyr1);
+		mapbyIU(xlyr2, yellowcircle);
+	}
+	else if (selectedtheme=="2") { // by new
+		mapbynew(xlyr1);
+		mapbynew(xlyr2, yellowcircle);
+	}
+}
+
+function mapreset(lyr, newstyle) {
+	lyr.eachLayer(function(feature) {
+		feature.setStyle(newstyle); 
+	});		
+}	
+
+function mapbyIU(lyr, newstyle) {
+	lyr.eachLayer(function(feature) {
+		let elm = feature ;
+		Auth = elm.feature.properties.Authority;
+		if ((Auth!="משרד הבטחון" && Auth!="נתע" && Auth!="רשות שדות התעופה" && Auth!=null)) {
+				if (newstyle!=null) { feature.setStyle(newstyle); }
+				feature.setStyle({
+				radius: 7 
+				});
+		} else {
+			feature.setStyle({
+				//radius: 0.1 ;
+				opacity: 0,
+				fillOpacity: 0
+			});
+		};
+	});		
+}	
+
+ 
+
+	
+function mapbynew(lyr, newstyle) {
+	lyr.eachLayer(function(feature) {
+		let elm = feature ;
+		if (elm.feature.properties.new === 1) {
+				if (newstyle!=null) { feature.setStyle(newstyle); }
+				feature.setStyle({
+				radius: 7 
+				});
+		} else {
+			feature.setStyle({
+				//radius: 0.1 ;
+				opacity: 0,
+				fillOpacity: 0
+			});
+		};
+	});		
+}	
+
+// -------------------------------------------------------
 
 function test(src) {
-	var x = 0; //to stop
+	var x = 0; // to stop
 	//alert('hi')	
 
-	var z = map ;
-
-	var y = map.layers ;
+	//var z = map ;
+	//var y = overlayMaps ;
 	
-	map.eachLayer(function(layer){
+	var o1 = overlayMaps[lyr1.name]
+
+	o1.eachLayer(function(feature) {
+		let yy = feature ;
+		//alert(yy.feature.properties.city);
+		//alert(feature.feature.properties.city);
+		feature.setStyle(yellowcircle);
+		});	
+			
+	/* map.eachLayer(function(layer){
 		layer.bindPopup('Hello');
 	});
 
@@ -189,15 +260,14 @@ function test(src) {
 	map.eachLayer(function(layer) {
 		if( layer instanceof L.TileLayer )
 			layers.push(layer);
-	});
+	}); */
+	d=0;
 
-	console.log(layers)
-	}
+	//console.log(layers)
+}
 
-*/	
 
 /*
-
 
 // ------------------------------------------------------------
 

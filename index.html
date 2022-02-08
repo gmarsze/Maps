@@ -50,15 +50,15 @@
 		.theme {
 			direction: rtl;
 			text-align: center;
-			width: 8%;
-			height: 30px;
+			width: 10%;
+			height: 2%;
 			padding: 5px;
 			background-color: white;
 			position: absolute;
 			top: 150px;
 			right: 10px;  
 			z-index: 2000;			
-			opacity: 0.9;
+			opacity: 1;
 		}
 	</style>
 
@@ -66,8 +66,20 @@
 </head>
 <body>
 
+<div class="theme">
+שנה מפה
+<select id="mapThemes" onchange="maptheme(this)">
+  <option value="0">ללא</option>
+  <option value="1">בין-עירוני</option>
+  <option value="2">חדש מאז 7-20</option>
+</select>
+</div>
+
+<button onclick="test()">test</button>
+
 <div id='map'></div>
 <script src="ll_script.js"></script>	
+
 
 </body>
 </html>
