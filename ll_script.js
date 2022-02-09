@@ -132,6 +132,9 @@ var overlayMaps = {};
 var sss = addlyr(map, lyr1, overlayMaps) ;
 addlyr(map, lyr2, overlayMaps) ;
 
+var clust1 ;
+var clust2 ;
+
 
 /*
 function addlyr (map, lyr, overlaysObj) {
@@ -173,20 +176,68 @@ function maptheme(src) {
 	let xlyr1 = overlayMaps[lyr1.name]
 	let xlyr2 = overlayMaps[lyr2.name]
 
-
 	if (selectedtheme=="0") {
+		removeclust();
+		addlyrs();
 		mapreset(xlyr1, redcircle);
 		mapreset(xlyr2, kikar);
 	}
 	else if (selectedtheme=="1") {
+		removeclust();
+		addlyrs();
 		mapbyIU(xlyr1);
 		mapbyIU(xlyr2, yellowcircle);
 	}
 	else if (selectedtheme=="2") { // by new
+		removeclust();
+		addlyrs();
 		mapbynew(xlyr1);
 		mapbynew(xlyr2, yellowcircle);
 	}
+	else if (selectedtheme=="3") { // cluster
+		removelyrs();
+		removeclust();
+		if (clust2!=null) {
+			clust2.remove();
+			}
+		if (clust1!=null) { clust1.addTo(map);;}
+		else {clust1 = mapcluster(xlyr1);}
+	}
+	else if (selectedtheme=="4") { // cluster
+		removelyrs();
+		removeclust();
+		if (clust1!=null) {
+			clust1.remove();
+			}
+		if (clust2!=null) { clust2.addTo(map);;}
+		else {clust2 = mapcluster(xlyr2);}
+	}
+
 }
+
+function removelyrs() {
+	let xlyr1 = overlayMaps[lyr1.name]
+	let xlyr2 = overlayMaps[lyr2.name]
+	xlyr1.remove();
+	xlyr2.remove();
+}	
+
+function removeclust() {
+	if (clust1!=null) {
+		clust1.remove();
+		}
+	if (clust2!=null) {
+		clust2.remove();
+		}
+}	
+
+function addlyrs() {
+	let xlyr1 = overlayMaps[lyr1.name]
+	let xlyr2 = overlayMaps[lyr2.name]
+	xlyr1.addTo(map);
+	xlyr2.addTo(map);
+}	
+
 
 function mapreset(lyr, newstyle) {
 	lyr.eachLayer(function(feature) {
@@ -231,6 +282,13 @@ function mapbynew(lyr, newstyle) {
 	});		
 }	
 
+function mapcluster(lyr) {
+	let markers = L.markerClusterGroup();
+	markers.addLayer(lyr); // add it to the cluster group
+	map.addLayer(markers);		// add it to the map
+	map.fitBounds(markers.getBounds()); //set view on the cluster extend
+	return markers;	
+}	
 // -------------------------------------------------------
 
 function test(src) {
