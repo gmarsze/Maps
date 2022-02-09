@@ -213,9 +213,6 @@ function mapbyIU(lyr, newstyle) {
 	});		
 }	
 
- 
-
-	
 function mapbynew(lyr, newstyle) {
 	lyr.eachLayer(function(feature) {
 		let elm = feature ;
