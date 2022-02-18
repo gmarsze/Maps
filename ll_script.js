@@ -13,10 +13,13 @@ const redcircle = {
     fillOpacity: 0.8
 };
 const violetcircle = Object.assign({}, redcircle);
-violetcircle.fillColor = "#EE82EE";
+violetcircle.fillOpacity = 0.5;
+violetcircle.fillColor =  "#EE82EE";
 
 const yellowcircle = Object.assign({}, redcircle);
+violetcircle.fillOpacity = 0.1;
 yellowcircle.fillColor = "#FFFF00";
+
 
 const kikar = {
     radius: 4,
@@ -27,6 +30,10 @@ const kikar = {
     fillOpacity: 0.3
 };
 
+const kikar2 = Object.assign({}, kikar);
+kikar2.radius = 8;
+kikar2.color = "#00FF00";
+kikar2.fillColor = "#0000FF";
 
 // ------------------------------------------------------------------------
 
@@ -79,7 +86,7 @@ var mapboxstreetstiles = L.tileLayer(provider.connect, {
 //  see https://leafletjs.com/examples/wms/wms.html
 var baseMaps = {
 	"רקע צבעוני": mapboxstreetstiles,
-	"רקע אפור": mapboxlighttiles 
+	"רקע אפור": mapboxlighttiles
 };
 
 // -----------------------------------------------
@@ -100,9 +107,25 @@ const lyr1 = {
 }  
 
 const lyr2 = { 
-	name: "מעגלי תנועה - סוף 2021",
+	// name: "מעגלי תנועה - סוף 2021",
+	name: "מעגלי תנועה - מפה",
 	url: "https://gmarsze.github.io/Maps/data/kikar2021.geoJson",
 	style: kikar, // yellowcircle,
+	popup: function(feature, layer) {
+		if (feature.properties) {
+				var popupcontent = 'מעגל תנועה<br>'+'יישוב: ' + feature.properties.city ;
+				if (feature.properties.TzName!=null)    { popupcontent = popupcontent + '<br> צומת: '+feature.properties.TzName ;} ;
+				if (feature.properties.streets!=null)   { popupcontent = popupcontent + '<br> רחובות: '+feature.properties.streets } ;
+				if (feature.properties.Authority!=null) { popupcontent = popupcontent + '<br> רשות תמרור: '+feature.properties.Authority };
+				layer.bindPopup(popupcontent);
+				}
+	}	
+}
+
+const lyr3 = { 
+	name: "מעגלי תנועה - בנטל",
+	url: "https://gmarsze.github.io/Maps/data/kikarbntl2021.geoJson",
+	style: kikar2, // yellowcircle,
 	popup: function(feature, layer) {
 		if (feature.properties) {
 				var popupcontent = 'מעגל תנועה<br>'+'יישוב: ' + feature.properties.city ;
@@ -131,10 +154,14 @@ domainTheme.fillColor = [ 0, "#FFFF00", "#FF0000" ];
 var overlayMaps = {};
 var sss = addlyr(map, lyr1, overlayMaps) ;
 addlyr(map, lyr2, overlayMaps) ;
+addlyr(map, lyr3, overlayMaps) ;
 
 var clust1 ;
 var clust2 ;
 
+// close ramzor
+var o1 = overlayMaps[lyr1.name]
+o1.remove();
 
 /*
 function addlyr (map, lyr, overlaysObj) {
@@ -175,18 +202,25 @@ function maptheme(src) {
 
 	let xlyr1 = overlayMaps[lyr1.name]
 	let xlyr2 = overlayMaps[lyr2.name]
+	let xlyr3 = overlayMaps[lyr3.name]
 
 	if (selectedtheme=="0") {
 		removeclust();
 		addlyrs();
 		mapreset(xlyr1, redcircle);
 		mapreset(xlyr2, kikar);
+		mapreset(xlyr3, kikar2);
+xlyr1.remove();
 	}
 	else if (selectedtheme=="1") {
 		removeclust();
 		addlyrs();
 		mapbyIU(xlyr1);
+xlyr1.remove();
 		mapbyIU(xlyr2, yellowcircle);
+		mapbyIU(xlyr3, violetcircle);
+xlyr3.remove();
+xlyr3.addTo(map);
 	}
 	else if (selectedtheme=="2") { // by new
 		removeclust();
@@ -295,9 +329,15 @@ function test(src) {
 	var x = 0; // to stop
 	//alert('hi')	
 
+
+
+	//var o1 = overlayMaps[lyr1.name]
+	//o1.remove();
+
 	//var z = map ;
 	//var y = overlayMaps ;
 	
+	/*
 	var o1 = overlayMaps[lyr1.name]
 
 	o1.eachLayer(function(feature) {
@@ -306,7 +346,7 @@ function test(src) {
 		//alert(feature.feature.properties.city);
 		feature.setStyle(yellowcircle);
 		});	
-			
+	*/		
 	/* map.eachLayer(function(layer){
 		layer.bindPopup('Hello');
 	});
