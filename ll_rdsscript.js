@@ -19,10 +19,11 @@ black_line = {
 
 // https://drustack.github.io/Leaflet.SyncView/
 const mapproperties = {
-	initial_lon: 32.06744693937369,
-	initial_lat: 34.82906341552735,
-	initial_zm: 13 
+	initial_lon: 32.048403,
+	initial_lat: 34.957556,
+	initial_zm: 11 
 };
+
 
 const mapboxlight = {
 	connect: 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw',
@@ -101,16 +102,16 @@ const lyr1 = {
 	style: stylvl1,
 	popup: function(feature, layer) {
 		if (feature.properties) {
-				popupcontent = feature.properties.NAME + '<br>'+'סיווג: ' + feature.properties.MAVAT_NAME ;
-				if (feature.properties.PLANNO!=null)    { popupcontent = popupcontent + '<br> תכנית: '+feature.properties.PLANNO ;} ;
-				if (feature.properties.REMARKS!=null)   { popupcontent = popupcontent + '<br> הערות: '+feature.properties.REMARKS } ;
-				layer.bindPopup(popupcontent);
-				//layer.setText(feature.properties.ROADNUMBER, { center: true, offset: 0, repeat: false, orientation: 'flip', 
-				//			attributes: { fill: 'black',  'stroke': 'blue', 'background-color': 'red', 'font-size': '20', 'font-weight': 'bold' } });
-				if (feature.properties.Length>1)  {lbl = feature.properties.ROADNUMBER } 
-				else {lbl = null }
-				layer.bindTooltip(lbl, {permanent: true, direction: 'center', className: 'RoadLabel'}).openTooltip();
-				}  
+			popupcontent = feature.properties.NAME + '<br>'+'סיווג: ' + feature.properties.MAVAT_NAME ;
+			if (feature.properties.PLANNO!=null)    { popupcontent = popupcontent + '<br> תכנית: '+feature.properties.PLANNO ;} ;
+			if (feature.properties.REMARKS!=null)   { popupcontent = popupcontent + '<br> הערות: '+feature.properties.REMARKS } ;
+			layer.bindPopup(popupcontent);
+			//layer.setText(feature.properties.ROADNUMBER, { center: true, offset: 0, repeat: false, orientation: 'flip', 
+			//			attributes: { fill: 'black',  'stroke': 'blue', 'background-color': 'red', 'font-size': '20', 'font-weight': 'bold' } });
+			if (feature.properties.Length>1)  {lbl = feature.properties.ROADNUMBER } 
+			else {lbl = null }
+			layer.bindTooltip(lbl, {permanent: true, direction: 'center', className: 'RoadLabel'}).openTooltip();
+			}  
 	},
 }  
 
@@ -155,6 +156,55 @@ var sss = addlyr(map, lyr1, overlayMaps) ;
 // close ramzor
 //var o1 = overlayMaps[lyr1.name]
 //o1.remove();
+
+map.on('zoomend', function () {
+    var zoomLevel = map.getZoom();
+	//alert(zoomLevel);
+	document.getElementById("Zoom").innerHTML = zoomLevel.toString();	
+	
+	var boxes = document.querySelectorAll('.RoadLabel');
+
+	boxes.forEach(box => {
+	  //box.style.backgroundColor = 'purple';
+	  //box.style.width = '30px';
+	  if (zoomLevel<11) { num = 8; }
+	  else if (zoomLevel<13) {num = 12 }
+	  else {num = 15 }
+	  box.style.fontSize = num.toString() + 'px';
+	});	
+});
+	
+/*	
+let num = 15;
+let text = num.toString();
+
+font-size: 12px;
+    //var tooltip = $('.leaflet-tooltip');
+	const tooltip = document.querySelector('.leaflet-tooltip');
+
+    switch (zoomLevel) {
+        case -2:
+            //tooltip.css('font-size', 7);
+            break;
+        case -1:
+            //tooltip.css('font-size', 10);
+            break;
+        case 0:
+            //tooltip.css('font-size', 12);
+            break;
+        case 1:
+            //tooltip.css('font-size', 14);
+            break;
+        case 2:
+            //tooltip.css('font-size', 16);
+            break;
+        case 3:
+            //tooltip.css('font-size', 18);
+            break;
+        default:
+            //tooltip.css('font-size', 14);
+    }
+*/	
 
 
 function addlyr (map, lyr, overlaysObj) {
