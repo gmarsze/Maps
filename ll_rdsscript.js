@@ -118,7 +118,6 @@ const lyr1 = {
 //	flds = { "ID", "Dir", "Length", "ROADNUMBER", "MAVAT_CODE", "MAVAT_NAME",  "RDNMBR_OLD", "NAME", "LABEL", "REMARKS", "PLANNO",
 //			  "Lvl", "Substract" ,"hov" ,"transit" ,"special" ,"tunnel"}  // 
 
-
 	/*	
         style: function () {
             return {
@@ -173,6 +172,37 @@ map.on('zoomend', function () {
 	  box.style.fontSize = num.toString() + 'px';
 	});	
 });
+
+// -------------------------------------------------------
+
+function tooglelbl() {
+	// Get the checkbox
+	var checkBox = document.getElementById("labels");
+	// Get the output text
+	var boxes = document.querySelectorAll('.RoadLabel');
+	//var text = document.getElementById("text");
+
+	// If the checkbox is checked, display the output text
+	if (checkBox.checked == true){
+		display = "block";
+	} else {
+		display = "none";
+	}
+	
+	boxes.forEach(box => {
+	  box.style.display = display;
+	});
+	
+}
+/*
+function showStuff(id, text, btn) {
+    document.getElementById(id).style.display = 'block';
+    // hide the lorem ipsum text
+    document.getElementById(text).style.display = 'none';
+    // hide the link
+    btn.style.display = 'none';
+}
+*/
 	
 /*	
 let num = 15;
@@ -250,8 +280,6 @@ function mapreset(lyr, newstyle) {
 	});		
 }	
 
-
-
 // -------------------------------------------------------
 
 function test(src) {
@@ -296,14 +324,11 @@ function changeview(src) {
 	selectedtheme = src.value;	
 	//alert(src.value);
 
-	if (selectedtheme=="0") {
-		map.setView([mapproperties.initial_lon, mapproperties.initial_lat], mapproperties.initial_zm);
-	}
-	else if (selectedtheme=="1") {
+	if (selectedtheme=="1") {
 		map.setView([32.83430827354381, 35.19882202148438], 11);
 	}
 	else if (selectedtheme=="2") {
-		map.setView([32.006555, 35.138077], 11);
+		map.setView([mapproperties.initial_lon, mapproperties.initial_lat], mapproperties.initial_zm);
 	}
 	else if (selectedtheme=="3") {
 		map.setView([31.272687, 34.758303], 11);
