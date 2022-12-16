@@ -61,6 +61,31 @@
 			z-index: 2000;			
 			opacity: 1;
 		}
+		.dropdown {
+			direction: rtl;
+			text-align: center;
+			width: 10%;
+			height: 2%;
+			padding: 5px;
+			background-color: white;
+			position: absolute;
+			right: 10px;  
+			z-index: 2000;			
+			opacity: 1;
+		}
+
+		.RoadLabel{
+		  background: white;
+		  border:2;
+		  border-radius:5px;
+		  box-shadow: 0 0px 0px;
+		  padding: 0px;
+		  margin: 0px;
+		  font-weight: bold;
+		}
+		#views {
+			top: 120px;
+		}	
 	</style>
 
 	
@@ -68,6 +93,16 @@
 <body>
 
 <!-- <button onclick="test()">test</button> -->
+
+<div class="dropdown" id="views">
+שנה חלון
+<select id="windows" onchange="changeview(this)">
+  <option value="0">initial</option>
+  <option value="1">north</option>
+  <option value="2">center</option>
+  <option value="3">south</option>
+</select>
+</div>
 
 <div id='map'></div>
 <script src="ll_rdsscript.js"></script>	

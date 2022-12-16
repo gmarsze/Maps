@@ -75,17 +75,21 @@ var baseMaps = {
 stylvl1 = function(feature) {
 	lvl = feature.properties.Lvl;
 	if ( lvl == 1 ) {
-		c = 'blue'
+		c = 'blue',
+		w = 7
 	} else if ( lvl == 2 ) { 
 		c = 'red'
+		w = 5
 	} else {
 		c = 'green'
+		w = 4
 	}
 
 	return {
 		color: c,
 		//dashArray: "30 10",
-		weight: 5
+		// smoothFactor: 0,
+		weight: w
 	};
 }
 
@@ -101,26 +105,14 @@ const lyr1 = {
 				if (feature.properties.PLANNO!=null)    { popupcontent = popupcontent + '<br> תכנית: '+feature.properties.PLANNO ;} ;
 				if (feature.properties.REMARKS!=null)   { popupcontent = popupcontent + '<br> הערות: '+feature.properties.REMARKS } ;
 				layer.bindPopup(popupcontent);
+				//layer.setText(feature.properties.ROADNUMBER, { center: true, offset: 0, repeat: false, orientation: 'flip', 
+				//			attributes: { fill: 'black',  'stroke': 'blue', 'background-color': 'red', 'font-size': '20', 'font-weight': 'bold' } });
+				if (feature.properties.Length>1)  {lbl = feature.properties.ROADNUMBER } 
+				else {lbl = null }
+				layer.bindTooltip(lbl, {permanent: true, direction: 'center', className: 'RoadLabel'}).openTooltip();
 				}  
 	},
-	onEachFeature: function (feature, layer) {
-		layer.setText(feature.properties.ROADNUMBER, {offset: -5});
-	},
-	/*onEachFeature: function (feature, layer) {
-		bindLabel("My Label", {noHide: true, className: "my-label", offset: [0, 0] });
-	}*/	
 }  
-
-/*
-
-
-L.geoJson(vessels,{
-    onEachFeature: function (feature, layer) {
-        layer.bindPopup("ID: " + feature.properties.id + "<br>Name: " + feature.properties.name + "<br>DateTime: " + feature.properties.vdatetime + "<br>Speed: " + feature.properties.speedknots + " knots<br>CMG: " + feature.properties.cmg + "°");
-        layer.bindTooltip(feature.properties.name, {permanent: true, direction: 'right'}).openTooltip();
-    }
-}).addTo(map)
-*/
 
 //	flds = { "ID", "Dir", "Length", "ROADNUMBER", "MAVAT_CODE", "MAVAT_NAME",  "RDNMBR_OLD", "NAME", "LABEL", "REMARKS", "PLANNO",
 //			  "Lvl", "Substract" ,"hov" ,"transit" ,"special" ,"tunnel"}  // 
@@ -248,6 +240,26 @@ function test(src) {
 	//console.log(layers)
 }
 
+
+function changeview(src) {
+	
+	selectedtheme = src.value;	
+	//alert(src.value);
+
+	if (selectedtheme=="0") {
+		map.setView([mapproperties.initial_lon, mapproperties.initial_lat], mapproperties.initial_zm);
+	}
+	else if (selectedtheme=="1") {
+		map.setView([32.83430827354381, 35.19882202148438], 11);
+	}
+	else if (selectedtheme=="2") {
+		map.setView([32.006555, 35.138077], 11);
+	}
+	else if (selectedtheme=="3") {
+		map.setView([31.272687, 34.758303], 11);
+	}
+	
+}
 
 /*
 
