@@ -160,7 +160,7 @@ var sss = addlyr(map, lyr1, overlayMaps) ;
 map.on('zoomend', function () {
     var zoomLevel = map.getZoom();
 	//alert(zoomLevel);
-	document.getElementById("Zoom").innerHTML = zoomLevel.toString();	
+	// document.getElementById("Zoom").innerHTML = zoomLevel.toString();	
 	
 	var boxes = document.querySelectorAll('.RoadLabel');
 
