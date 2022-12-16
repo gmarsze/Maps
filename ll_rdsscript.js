@@ -90,6 +90,7 @@ stylvl1 = function(feature) {
 }
 
 
+
 const lyr1 = { 
 	name: "דרכים תמא",
 	url: "https://gmarsze.github.io/Maps/data/TamaRds.geoJson",
@@ -103,11 +104,16 @@ const lyr1 = {
 				}  
 	},
 	onEachFeature: function (feature, layer) {
+		layer.setText(feature.properties.ROADNUMBER, {offset: -5});
+	},
+	/*onEachFeature: function (feature, layer) {
 		bindLabel("My Label", {noHide: true, className: "my-label", offset: [0, 0] });
-	}	
+	}*/	
 }  
 
 /*
+
+
 L.geoJson(vessels,{
     onEachFeature: function (feature, layer) {
         layer.bindPopup("ID: " + feature.properties.id + "<br>Name: " + feature.properties.name + "<br>DateTime: " + feature.properties.vdatetime + "<br>Speed: " + feature.properties.speedknots + " knots<br>CMG: " + feature.properties.cmg + "°");
