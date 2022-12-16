@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>רמזורים 2021</title>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+	<link rel="stylesheet" href="./lib/boxzoom/leaflet-control-boxzoom.css" />
+	<link rel="stylesheet" href="./lib/marker_cluster/MarkerCluster.css" />
+	<link rel="stylesheet" href="./lib/marker_cluster/MarkerCluster.Default.css" />
+	
+	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+	<script src="./lib/boxzoom/leaflet-control-boxzoom.js"></script>
+	<script src="./lib/marker_cluster/leaflet.markercluster-src.js"></script>	
+	<script src="leaflet.ajax.min.js"></script>	
+	
+	<!-- <link rel="icon" href="https://mot-roundtbl.org.il/wp-content/uploads/2020/10/favicon-16x16-1.png" sizes="32x32"> -->
+
+	<style>
+		html, body {
+			height: 100%;
+			margin: 0;
+		}
+		#map {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+		}
+		.leaflet-popup{
+			direction:rtl;
+		}
+		.legend {
+			direction: rtl;
+			text-align: right;
+			line-height: 18px;
+			color: #555;
+			padding: 6px 8px;
+			background: rgba(255,255,255,0.8);
+		}
+		.legend i {
+			width: 18px;
+			height: 18px;
+			float: right;
+			margin-left: 8px;
+			opacity: 0.7;
+		}
+		.theme {
+			direction: rtl;
+			text-align: center;
+			width: 10%;
+			height: 2%;
+			padding: 5px;
+			background-color: white;
+			position: absolute;
+			top: 180px;
+			right: 10px;  
+			z-index: 2000;			
+			opacity: 1;
+		}
+	</style>
+
+	
+</head>
+<body>
+
+<div class="theme">
+שנה מפה
+<select id="mapThemes" onchange="maptheme(this)">
+  <option value="0">ללא</option>
+  <option value="1">בין-עירוני</option>
+<!--  <option value="2">חדש מאז 7-20</option>
+  <option value="3">רמזוריים מקובץ</option>
+  <option value="4">מעגלים מקובץ</option>  -->
+</select>
+</div>
+
+<!-- <button onclick="test()">test</button> -->
+
+<div id='map'></div>
+<script src="ll_script.js"></script>	
+
+
+</body>
+</html>
