@@ -219,7 +219,7 @@ var map = L.map('map').setView([mapproperties.initial_lon, mapproperties.initial
 map.createPane('back');
 map.getPane('back').style.zIndex = 500;
 map.createPane('front');
-map.getPane('front').style.zIndex = 1500;
+map.getPane('front').style.zIndex = 5500;
 
 L.Control.boxzoom({ position:'topleft' }).addTo(map);
 mapboxlighttiles.addTo(map);
@@ -234,6 +234,7 @@ var slyr1 = addlyr(map, lyr1, overlayMaps) ;
 //var o1 = overlayMaps[lyr1.name]
 //o1.remove();
 
+/*
 map.on('zoomend', function () {
     var zoomLevel = map.getZoom();
 	//alert(zoomLevel);
@@ -251,8 +252,11 @@ map.on('zoomend', function () {
 	});	
 });
 
+*/
+
 // -------------------------------------------------------
 
+/*
 function tooglelbl() {
 	// Get the checkbox
 	var checkBox = document.getElementById("labels");
@@ -272,6 +276,8 @@ function tooglelbl() {
 	});
 	
 }
+*/
+
 /*
 function showStuff(id, text, btn) {
     document.getElementById(id).style.display = 'block';
@@ -317,7 +323,7 @@ font-size: 12px;
 
 function addlyr (map, lyr, overlaysObj) {
 	let geojson1 = new L.GeoJSON.AJAX(lyr.url, {	
-		pane: lyr.pane, 
+		pane: 'back', // lyr.pane, 
 		style: lyr.style, 
 //		pointToLayer: function (feature, latlng) {
 //			return L.circleMarker(latlng, lyr.style);
@@ -331,7 +337,7 @@ function addlyr (map, lyr, overlaysObj) {
 
 function addplyr (map, lyr, overlaysObj) {
 	let geojson1 = new L.GeoJSON.AJAX(lyr.url, {	
-		pane: lyr.pane, 
+		pane: 'front', // lyr.pane, 
 		style: lyr.style, 
 		pointToLayer: function (feature, latlng) {
 			return L.circleMarker(latlng, lyr.style);
@@ -367,11 +373,13 @@ function addlyr (map, lyr, overlaysObj) {
 
 // -------------------------------------------------
 
+/*
 function mapreset(lyr, newstyle) {
 	lyr.eachLayer(function(feature) {
 		feature.setStyle(newstyle); 
 	});		
 }	
+*/ 
 
 // -------------------------------------------------------
 
