@@ -117,6 +117,7 @@ const lyr1 = {
 	},
 }  
 
+// https://leafletjs.com/reference.html#path
 const lyr2 = { 
 	name: "דרכים מקומיות",
 	url: "https://gmarsze.github.io/Maps/data/MEKOMIT.geoJson",
@@ -140,6 +141,33 @@ const lyr2 = {
 			}  
 	},
 }  
+
+
+var geojsonMarkerOptions = {
+    radius: 8,
+    fillColor: "#ff7800",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+};
+
+
+const lyr3 = { 
+	name: "מוקדים  ראשית/אזורית",
+	url: "https://gmarsze.github.io/Maps/data/RASHIT_EZORIT_Node.geoJson",
+	style: {
+		color: 'black',
+		weight: 2.5
+		},
+    pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, geojsonMarkerOptions);
+    }
+}  
+
+
+// MEKOMIT_Node.geoJson
+
 
 
 /*
@@ -197,7 +225,7 @@ mapboxlighttiles.addTo(map);
 var overlayMaps = {};
 var slyr1 = addlyr(map, lyr1, overlayMaps) ;
 var slyr2 = addlyr(map, lyr2, overlayMaps) ;
-//addlyr(map, lyr3, overlayMaps) ;
+var slyr3 = addlyr(map, lyr3, overlayMaps) ;
 
 
 // close ramzor
