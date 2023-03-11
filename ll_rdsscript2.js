@@ -100,6 +100,7 @@ const lyr1 = {
 	name: "רשת ראשית/אזורית",
 	url: "https://gmarsze.github.io/Maps/data/RASHIT_EZORIT.geoJson",
 	style: stylvl1,
+	pane: 'back',
 	popup: function(feature, layer) {
 		if (feature.properties) {
 			popupcontent = feature.properties.keta + '<br>'+'סיווג: ' + feature.properties.LEVEL ;
@@ -114,13 +115,14 @@ const lyr1 = {
 			else {lbl = null }
 			layer.bindTooltip(lbl, {permanent: true, direction: 'center', className: 'RoadLabel'}).openTooltip();
 			}  
-	},
+	}
 }  
 
 // https://leafletjs.com/reference.html#path
 const lyr2 = { 
 	name: "דרכים מקומיות",
 	url: "https://gmarsze.github.io/Maps/data/MEKOMIT.geoJson",
+	pane: 'back',
 	style: {
 		color: '#8B4513',
 		weight: 2.5
@@ -139,30 +141,25 @@ const lyr2 = {
 			else {lbl = null }
 			layer.bindTooltip(lbl, {permanent: true, direction: 'center', className: 'RoadLabel'}).openTooltip();
 			}  
-	},
+	}
 }  
 
 
-var geojsonMarkerOptions = {
-    radius: 8,
-    fillColor: "#ff7800",
-    color: "#000",
+var blackcircle1 = {
+    radius: 4,
+    fillColor: "black",
+    color: "black",
     weight: 1,
     opacity: 1,
-    fillOpacity: 0.8
+    fillOpacity: 1
 };
 
 
 const lyr3 = { 
 	name: "מוקדים  ראשית/אזורית",
 	url: "https://gmarsze.github.io/Maps/data/RASHIT_EZORIT_Node.geoJson",
-	style: {
-		color: 'black',
-		weight: 2.5
-		},
-    pointToLayer: function (feature, latlng) {
-        return L.circleMarker(latlng, geojsonMarkerOptions);
-    }
+	pane: 'front',
+	style: blackcircle1
 }  
 
 // 
@@ -218,14 +215,19 @@ const lyr1 = {
 // var zoom_bar = new L.Control.ZoomBar({position: 'topright'}).addTo(map);
 
 var map = L.map('map').setView([mapproperties.initial_lon, mapproperties.initial_lat], mapproperties.initial_zm);
-L.Control.boxzoom({ position:'topleft' }).addTo(map);
 
+map.createPane('back');
+map.getPane('back').style.zIndex = 500;
+map.createPane('front');
+map.getPane('front').style.zIndex = 1500;
+
+L.Control.boxzoom({ position:'topleft' }).addTo(map);
 mapboxlighttiles.addTo(map);
 
 var overlayMaps = {};
-var slyr1 = addlyr(map, lyr1, overlayMaps) ;
+var slyr3 = addplyr(map, lyr3, overlayMaps) ;
 var slyr2 = addlyr(map, lyr2, overlayMaps) ;
-var slyr3 = addlyr(map, lyr3, overlayMaps) ;
+var slyr1 = addlyr(map, lyr1, overlayMaps) ;
 
 
 // close ramzor
@@ -315,6 +317,7 @@ font-size: 12px;
 
 function addlyr (map, lyr, overlaysObj) {
 	let geojson1 = new L.GeoJSON.AJAX(lyr.url, {	
+		pane: lyr.pane, 
 		style: lyr.style, 
 //		pointToLayer: function (feature, latlng) {
 //			return L.circleMarker(latlng, lyr.style);
@@ -323,6 +326,20 @@ function addlyr (map, lyr, overlaysObj) {
 		});
 	geojson1.addTo(map);
 	overlaysObj[lyr.name] = geojson1;
+}
+
+
+function addplyr (map, lyr, overlaysObj) {
+	let geojson1 = new L.GeoJSON.AJAX(lyr.url, {	
+		pane: lyr.pane, 
+		style: lyr.style, 
+		pointToLayer: function (feature, latlng) {
+			return L.circleMarker(latlng, lyr.style);
+			},
+		//onEachFeature: lyr.popup
+		});
+	geojson1.addTo(map);
+	//overlaysObj[lyr.name] = geojson1;
 }
 
 L.control.layers(baseMaps, overlayMaps, {collapsed:false}).addTo(map);
