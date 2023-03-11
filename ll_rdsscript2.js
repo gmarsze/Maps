@@ -1,4 +1,4 @@
-// ramzor map -v2
+// ketaim map -v1
 
 var selectedtheme = 0 ;
 
@@ -103,7 +103,7 @@ const lyr1 = {
 	pane: 'back',
 	popup: function(feature, layer) {
 		if (feature.properties) {
-			popupcontent = feature.properties.keta + '<br>'+'סיווג: ' + feature.properties.LEVEL ;
+			popupcontent = feature.properties.keta + '<br>'+'סיווג: ' + feature.properties.LEVEL + '<br>'+'אורך: ' + feature.properties.Length ;
 			//if (feature.properties.PLANNO!=null)    { popupcontent = popupcontent + '<br> תכנית: '+feature.properties.PLANNO ;} ;
 			//if (feature.properties.REMARKS!=null)   { popupcontent = popupcontent + '<br> הערות: '+feature.properties.REMARKS } ;
 			
@@ -111,9 +111,10 @@ const lyr1 = {
 			//layer.setText(feature.properties.ROADNUMBER, { center: true, offset: 0, repeat: false, orientation: 'flip', 
 			//			attributes: { fill: 'black',  'stroke': 'blue', 'background-color': 'red', 'font-size': '20', 'font-weight': 'bold' } });
 			
-			if (feature.properties.Length>1)  {lbl = feature.properties.keta } 
-			else {lbl = null }
-			layer.bindTooltip(lbl, {permanent: true, direction: 'center', className: 'RoadLabel'}).openTooltip();
+			//if (feature.properties.Length>1)  {lbl = feature.properties.keta } 
+			//else {lbl = null }
+			//lbl = feature.properties.keta
+			//layer.bindTooltip(lbl, {permanent: true, direction: 'center', className: 'RoadLabel'}).openTooltip();
 			}  
 	}
 }  
@@ -137,16 +138,17 @@ const lyr2 = {
 			//layer.setText(feature.properties.ROADNUMBER, { center: true, offset: 0, repeat: false, orientation: 'flip', 
 			//			attributes: { fill: 'black',  'stroke': 'blue', 'background-color': 'red', 'font-size': '20', 'font-weight': 'bold' } });
 			
-			if (feature.properties.Length>1)  {lbl = feature.properties.keta } 
-			else {lbl = null }
-			layer.bindTooltip(lbl, {permanent: true, direction: 'center', className: 'RoadLabel'}).openTooltip();
+			//if (feature.properties.Length>1)  {lbl = feature.properties.keta } 
+			//else {lbl = null }
+			//lbl = feature.properties.keta
+			//layer.bindTooltip(lbl, {permanent: true, direction: 'center', className: 'RoadLabel'}).openTooltip();
 			}  
 	}
 }  
 
 
 var blackcircle1 = {
-    radius: 4,
+    radius: 6,
     fillColor: "black",
     color: "black",
     weight: 1,
@@ -162,8 +164,22 @@ const lyr3 = {
 	style: blackcircle1
 }  
 
-// 
-// MEKOMIT_Node.geoJson
+
+var blackcircle2 = {
+    radius: 2,
+    fillColor: "black",
+    color: "black",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 1
+};
+
+const lyr4 = { 
+	name: "מוקדים  ראשית/אזורית",
+	url: "https://gmarsze.github.io/Maps/data/MEKOMIT_Node.geoJson",
+	pane: 'front',
+	style: blackcircle2
+}  
 
 
 
@@ -219,15 +235,16 @@ var map = L.map('map').setView([mapproperties.initial_lon, mapproperties.initial
 map.createPane('back');
 map.getPane('back').style.zIndex = 500;
 map.createPane('front');
-map.getPane('front').style.zIndex = 5500;
+map.getPane('front').style.zIndex = 1500;
 
 L.Control.boxzoom({ position:'topleft' }).addTo(map);
 mapboxlighttiles.addTo(map);
 
 var overlayMaps = {};
-var slyr3 = addplyr(map, lyr3, overlayMaps) ;
 var slyr2 = addlyr(map, lyr2, overlayMaps) ;
 var slyr1 = addlyr(map, lyr1, overlayMaps) ;
+var slyr3 = addplyr(map, lyr3, overlayMaps) ;
+var slyr4 = addplyr(map, lyr4, overlayMaps) ;
 
 
 // close ramzor
@@ -245,18 +262,17 @@ map.on('zoomend', function () {
 	boxes.forEach(box => {
 	  //box.style.backgroundColor = 'purple';
 	  //box.style.width = '30px';
-	  if (zoomLevel<11) { num = 8; }
-	  else if (zoomLevel<13) {num = 12 }
-	  else {num = 15 }
+	  if (zoomLevel<11) { num = 4; }
+	  else if (zoomLevel<13) {num = 7 }
+	  else {num = 9 }
 	  box.style.fontSize = num.toString() + 'px';
 	});	
 });
 
-*/
 
 // -------------------------------------------------------
 
-/*
+
 function tooglelbl() {
 	// Get the checkbox
 	var checkBox = document.getElementById("labels");
@@ -323,7 +339,7 @@ font-size: 12px;
 
 function addlyr (map, lyr, overlaysObj) {
 	let geojson1 = new L.GeoJSON.AJAX(lyr.url, {	
-		pane: 'back', // lyr.pane, 
+		pane: lyr.pane, 
 		style: lyr.style, 
 //		pointToLayer: function (feature, latlng) {
 //			return L.circleMarker(latlng, lyr.style);
@@ -337,11 +353,11 @@ function addlyr (map, lyr, overlaysObj) {
 
 function addplyr (map, lyr, overlaysObj) {
 	let geojson1 = new L.GeoJSON.AJAX(lyr.url, {	
-		pane: 'front', // lyr.pane, 
+		pane: lyr.pane, 
 		style: lyr.style, 
 		pointToLayer: function (feature, latlng) {
 			return L.circleMarker(latlng, lyr.style);
-			},
+			} //,
 		//onEachFeature: lyr.popup
 		});
 	geojson1.addTo(map);
