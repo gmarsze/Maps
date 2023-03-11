@@ -74,15 +74,16 @@ var baseMaps = {
 
 
 stylvl1 = function(feature) {
-	lvl = feature.properties.Lvl;
+	lvl = feature.properties.LEVEL;
 	if ( lvl == 1 ) {
-		c = 'blue',
-		w = 7
-	} else if ( lvl == 2 ) { 
+		//c = 'blue',
 		c = 'red'
+		w = 6
+	} else if ( lvl == 2 ) { 
+		c = 'green'
 		w = 5
 	} else {
-		c = 'green'
+		c = '#32CD32'  // 'green'
 		w = 4
 	}
 
@@ -96,7 +97,7 @@ stylvl1 = function(feature) {
 
 
 const lyr1 = { 
-	name: "דרכים תמא",
+	name: "רשת ראשית/אזורית",
 	url: "https://gmarsze.github.io/Maps/data/RASHIT_EZORIT.geoJson",
 	style: stylvl1,
 	popup: function(feature, layer) {
@@ -116,6 +117,29 @@ const lyr1 = {
 	},
 }  
 
+const lyr2 = { 
+	name: "דרכים מקומיות",
+	url: "https://gmarsze.github.io/Maps/data/MEKOMIT.geoJson",
+	style: {
+		color: '#8B4513',
+		weight: 2.5
+		},
+	popup: function(feature, layer) {
+		if (feature.properties) {
+			popupcontent = feature.properties.keta + '<br>'+'סיווג: ' + feature.properties.LEVEL ;
+			//if (feature.properties.PLANNO!=null)    { popupcontent = popupcontent + '<br> תכנית: '+feature.properties.PLANNO ;} ;
+			//if (feature.properties.REMARKS!=null)   { popupcontent = popupcontent + '<br> הערות: '+feature.properties.REMARKS } ;
+			
+			layer.bindPopup(popupcontent);
+			//layer.setText(feature.properties.ROADNUMBER, { center: true, offset: 0, repeat: false, orientation: 'flip', 
+			//			attributes: { fill: 'black',  'stroke': 'blue', 'background-color': 'red', 'font-size': '20', 'font-weight': 'bold' } });
+			
+			if (feature.properties.Length>1)  {lbl = feature.properties.keta } 
+			else {lbl = null }
+			layer.bindTooltip(lbl, {permanent: true, direction: 'center', className: 'RoadLabel'}).openTooltip();
+			}  
+	},
+}  
 
 
 /*
@@ -171,8 +195,8 @@ L.Control.boxzoom({ position:'topleft' }).addTo(map);
 mapboxlighttiles.addTo(map);
 
 var overlayMaps = {};
-var sss = addlyr(map, lyr1, overlayMaps) ;
-//addlyr(map, lyr2, overlayMaps) ;
+var slyr1 = addlyr(map, lyr1, overlayMaps) ;
+var slyr2 = addlyr(map, lyr2, overlayMaps) ;
 //addlyr(map, lyr3, overlayMaps) ;
 
 
