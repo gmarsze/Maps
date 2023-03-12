@@ -166,11 +166,25 @@ var c1 = {
 	  "opacity": 1
 	}
 
+
+var blacksquare = {
+    radius: 6,
+	shape: "square",
+    fillColor: "black",
+    color: "black",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 1,
+	rotation: 0
+	}	
+	
+
 const lyr3 = { 
 	name: "מוקדים  ראשית/אזורית",
 	url: "https://gmarsze.github.io/Maps/data/RASHIT_EZORIT_Node.geoJson",
 	//pane: 'front',
-	style: blackcircle1
+	// style: blackcircle1
+	style: blacksquare
 }  
 
 
@@ -253,7 +267,7 @@ mapboxlighttiles.addTo(map);
 var overlayMaps = {};
 var slyr2 = addlyr(map, lyr2, overlayMaps) ;
 var slyr1 = addlyr(map, lyr1, overlayMaps) ;
-var slyr3 = addplyr(map, lyr3, overlayMaps) ;
+var slyr3 = addplyr1(map, lyr3, overlayMaps) ;
 var slyr4 = addplyr(map, lyr4, overlayMaps) ;
 
 
@@ -374,6 +388,30 @@ function addplyr (map, lyr, overlaysObj) {
 	geojson1.addTo(map);
 	//overlaysObj[lyr.name] = geojson1;
 }
+
+
+function addplyr1 (map, lyr, overlaysObj) {
+	let geojson1 = new L.GeoJSON.AJAX(lyr.url, {	
+			pointToLayer: function (feature, latlng) {
+			return L.shapeMarker(latlng, lyr.style)
+			}
+	geojson1.addTo(map);
+	//overlaysObj[lyr.name] = geojson1;
+}
+
+/*
+
+		var myLayer = L.geoJson(sampleGeoJSON, {
+			pointToLayer: function (feature, latlng) {
+				const r = randomIntFromInterval(0, 360)
+				return L.shapeMarker(latlng, {
+					shape: "square",
+					rotation: r
+				})
+			}
+		}). addTo(map);
+
+*/
 
 L.control.layers(baseMaps, overlayMaps, {collapsed:false}).addTo(map);
 
