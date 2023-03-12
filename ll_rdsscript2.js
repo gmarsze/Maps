@@ -21,7 +21,7 @@ black_line = {
 const mapproperties = {
 	initial_lon: 32.048403,
 	initial_lat: 34.957556,
-	initial_zm: 11 
+	initial_zm: 13 
 };
 
 
@@ -111,10 +111,10 @@ const lyr1 = {
 			//layer.setText(feature.properties.ROADNUMBER, { center: true, offset: 0, repeat: false, orientation: 'flip', 
 			//			attributes: { fill: 'black',  'stroke': 'blue', 'background-color': 'red', 'font-size': '20', 'font-weight': 'bold' } });
 			
-			//if (feature.properties.Length>1)  {lbl = feature.properties.keta } 
-			//else {lbl = null }
+			if (feature.properties.Length>0.5)  {lbl = feature.properties.keta } 
+			else {lbl = null }
 			//lbl = feature.properties.keta
-			//layer.bindTooltip(lbl, {permanent: true, direction: 'center', className: 'RoadLabel'}).openTooltip();
+			layer.bindTooltip(lbl, {permanent: true, direction: 'center', className: 'RoadLabel'}).openTooltip();
 			}  
 	}
 }  
@@ -168,7 +168,8 @@ var c1 = {
 
 
 var blacksquare = {
-    radius: 6,
+	pane: 'front',
+    radius: 5,
 	shape: "square",
     fillColor: "black",
     color: "black",
@@ -275,7 +276,6 @@ var slyr4 = addplyr(map, lyr4, overlayMaps) ;
 //var o1 = overlayMaps[lyr1.name]
 //o1.remove();
 
-/*
 map.on('zoomend', function () {
     var zoomLevel = map.getZoom();
 	//alert(zoomLevel);
@@ -316,7 +316,7 @@ function tooglelbl() {
 	});
 	
 }
-*/
+
 
 /*
 function showStuff(id, text, btn) {
@@ -392,12 +392,17 @@ function addplyr (map, lyr, overlaysObj) {
 
 function addplyr1 (map, lyr, overlaysObj) {
 	let geojson1 = new L.GeoJSON.AJAX(lyr.url, {	
-			pointToLayer: function (feature, latlng) {
+		pointToLayer: function (feature, latlng) {
 			return L.shapeMarker(latlng, lyr.style)
-			}
+			//return L.circleMarker(latlng, lyr.style);
+			//locationMarker = L.circleMarker(e.latlng, { pane: "locationMarker" });
+			} //,
+		//onEachFeature: lyr.popup
+		});
 	geojson1.addTo(map);
 	//overlaysObj[lyr.name] = geojson1;
 }
+
 
 /*
 
