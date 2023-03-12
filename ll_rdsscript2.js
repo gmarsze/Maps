@@ -148,6 +148,7 @@ const lyr2 = {
 
 
 var blackcircle1 = {
+	pane: 'front',
     radius: 6,
     fillColor: "black",
     color: "black",
@@ -156,16 +157,25 @@ var blackcircle1 = {
     fillOpacity: 1
 };
 
+var c1 = {
+	  pane: 'markers1',
+	  "radius": 5,
+	  "fillColor": "#ff7800",
+	  "color": "#ff7800",
+	  "weight": 1,
+	  "opacity": 1
+	}
 
 const lyr3 = { 
 	name: "מוקדים  ראשית/אזורית",
 	url: "https://gmarsze.github.io/Maps/data/RASHIT_EZORIT_Node.geoJson",
-	pane: 'front',
+	//pane: 'front',
 	style: blackcircle1
 }  
 
 
 var blackcircle2 = {
+	pane: 'front',
     radius: 2,
     fillColor: "black",
     color: "black",
@@ -177,7 +187,7 @@ var blackcircle2 = {
 const lyr4 = { 
 	name: "מוקדים  ראשית/אזורית",
 	url: "https://gmarsze.github.io/Maps/data/MEKOMIT_Node.geoJson",
-	pane: 'front',
+	//pane: 'front',
 	style: blackcircle2
 }  
 
@@ -353,10 +363,11 @@ function addlyr (map, lyr, overlaysObj) {
 
 function addplyr (map, lyr, overlaysObj) {
 	let geojson1 = new L.GeoJSON.AJAX(lyr.url, {	
-		pane: lyr.pane, 
-		style: lyr.style, 
+		// pane: lyr.pane, 
+		// style: lyr.style, 
 		pointToLayer: function (feature, latlng) {
 			return L.circleMarker(latlng, lyr.style);
+			//locationMarker = L.circleMarker(e.latlng, { pane: "locationMarker" });
 			} //,
 		//onEachFeature: lyr.popup
 		});
