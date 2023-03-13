@@ -19,9 +19,9 @@ black_line = {
 
 // https://drustack.github.io/Leaflet.SyncView/
 const mapproperties = {
-	initial_lon: 32.048403,
-	initial_lat: 34.957556,
-	initial_zm: 13 
+	initial_lon: 32.05,
+	initial_lat: 34.9,
+	initial_zm: 12 
 };
 
 
@@ -169,7 +169,7 @@ var c1 = {
 
 var blacksquare = {
 	pane: 'front',
-    radius: 5,
+    radius: 3,
 	shape: "square",
     fillColor: "black",
     color: "black",
@@ -181,7 +181,7 @@ var blacksquare = {
 	
 
 const lyr3 = { 
-	name: "מוקדים  ראשית/אזורית",
+	name: "קצה קטע רשת ראשית/אזורית",
 	url: "https://gmarsze.github.io/Maps/data/RASHIT_EZORIT_Node.geoJson",
 	//pane: 'front',
 	// style: blackcircle1
@@ -200,7 +200,7 @@ var blackcircle2 = {
 };
 
 const lyr4 = { 
-	name: "מוקדים  ראשית/אזורית",
+	name: "קצה קטע מקומי",
 	url: "https://gmarsze.github.io/Maps/data/MEKOMIT_Node.geoJson",
 	//pane: 'front',
 	style: blackcircle2
@@ -266,15 +266,17 @@ L.Control.boxzoom({ position:'topleft' }).addTo(map);
 mapboxlighttiles.addTo(map);
 
 var overlayMaps = {};
-var slyr2 = addlyr(map, lyr2, overlayMaps) ;
 var slyr1 = addlyr(map, lyr1, overlayMaps) ;
 var slyr3 = addplyr1(map, lyr3, overlayMaps) ;
+var slyr2 = addlyr(map, lyr2, overlayMaps) ;
 var slyr4 = addplyr(map, lyr4, overlayMaps) ;
 
 
-// close ramzor
-//var o1 = overlayMaps[lyr1.name]
-//o1.remove();
+// close local
+var o1 = overlayMaps[lyr2.name]
+o1.remove();
+var o1 = overlayMaps[lyr4.name]
+o1.remove();
 
 map.on('zoomend', function () {
     var zoomLevel = map.getZoom();
@@ -386,7 +388,7 @@ function addplyr (map, lyr, overlaysObj) {
 		//onEachFeature: lyr.popup
 		});
 	geojson1.addTo(map);
-	//overlaysObj[lyr.name] = geojson1;
+	overlaysObj[lyr.name] = geojson1;
 }
 
 
@@ -400,7 +402,7 @@ function addplyr1 (map, lyr, overlaysObj) {
 		//onEachFeature: lyr.popup
 		});
 	geojson1.addTo(map);
-	//overlaysObj[lyr.name] = geojson1;
+	overlaysObj[lyr.name] = geojson1;
 }
 
 
