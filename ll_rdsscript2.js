@@ -111,7 +111,7 @@ const lyr1 = {
 			//layer.setText(feature.properties.ROADNUMBER, { center: true, offset: 0, repeat: false, orientation: 'flip', 
 			//			attributes: { fill: 'black',  'stroke': 'blue', 'background-color': 'red', 'font-size': '20', 'font-weight': 'bold' } });
 			
-			if (feature.properties.Length>0.5)  {lbl = feature.properties.keta } 
+			if (feature.properties.Length>0.3)  {lbl = feature.properties.keta } 
 			else {lbl = null }
 			//lbl = feature.properties.keta
 			layer.bindTooltip(lbl, {permanent: true, direction: 'center', className: 'RoadLabel'}).openTooltip();
@@ -300,6 +300,7 @@ map.on('zoomend', function () {
 
 
 function tooglelbl() {
+	
 	// Get the checkbox
 	var checkBox = document.getElementById("labels");
 	// Get the output text
@@ -316,8 +317,38 @@ function tooglelbl() {
 	boxes.forEach(box => {
 	  box.style.display = display;
 	});
-	
 }
+
+
+function lblsoff() {
+	var boxes = document.querySelectorAll('.RoadLabel');
+	//var text = document.getElementById("text");
+
+	display = "none";
+	
+	boxes.forEach(box => {
+	  box.style.display = display;
+	});
+
+}
+
+
+/*
+function addlbl() {
+	var o1 = overlayMaps[lyr1.name]
+	o1.eachLayer(function(feature) {
+		let yy = feature ;
+		let Len  = yy.feature.properties.Length ;
+		let keta = yy.feature.properties.keta ;
+                    
+		if (Len>0.5)  {lbl = keta } 
+		else {lbl = null }
+		//lbl = feature.properties.keta
+		o1.bindTooltip(lbl, {permanent: true, direction: 'center', className: 'RoadLabel'}).openTooltip();
+		});	
+		
+
+} /
 
 
 /*
@@ -421,6 +452,7 @@ function addplyr1 (map, lyr, overlaysObj) {
 */
 
 L.control.layers(baseMaps, overlayMaps, {collapsed:false}).addTo(map);
+//  lblsoff();
 
 /*
 var domainTheme = {};
