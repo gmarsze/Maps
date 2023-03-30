@@ -24,7 +24,7 @@ const mapproperties = {
 	initial_zm: 11 
 };
 
-
+/*
 const mapboxlight = {
 	connect: 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw',
 	maxZoom: 18,
@@ -37,37 +37,86 @@ const mapboxlight = {
 const mapboxstreets = Object.assign({}, mapboxlight);
 mapboxstreets.id = 'mapbox/streets-v11';
 
+*/
+// https://wiki.openstreetmap.org/wiki/Raster_tile_providers
 const osm = {
-		connect: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', 
+		connect: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',     // https://tile.openstreetmap.org/${z}/${x}/${y}.png
+		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
 		maxZoom: 18
 		};
 const osm_dark = {
 		connect: 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', 
-		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+		maxZoom: 18
         };
 
-var provider = mapboxlight ;
-var mapboxlighttiles = L.tileLayer(provider.connect, {
-	maxZoom: provider.maxZoom,
+
+var CartoDB_Voyager = { // color
+	connect: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', 
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+	subdomains: 'abcd',
+	maxZoom: 20
+	};
+
+var CartoDB_Positron = {  // light
+	connect: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', 
+	//connect: 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+	subdomains: 'abcd',
+	maxZoom: 20
+	};
+
+
+var Stadia_OSMBright = { // color
+	connect: 'https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png', 
+	maxZoom: 20,
+	attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+	};
+
+var Stadia_AlidadeSmooth = {  // light
+	connect: 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', 
+	maxZoom: 20,
+	attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+	};
+
+var Esri_WorldStreetMap = { // color
+	connect: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
+	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012'
+	};
+
+var Esri_WorldGrayCanvas = {  // light
+	connect: 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', 
+	attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
+	maxZoom: 16
+	};
+	
+// ---------------------------------------------
+
+var provider = osm; // CartoDB_Voyager ;
+var streetstiles = L.tileLayer(provider.connect, {
 	attribution: provider.attribution,
-	id: provider.id,
-	tileSize: provider.tileSize,
-	zoomOffset: provider.zoomOffset
+	//id: provider.id,
+	//tileSize: provider.tileSize,
+	//zoomOffset: provider.zoomOffset
+	maxZoom: provider.maxZoom
 }) ;
 
-var provider = mapboxstreets ;
-var mapboxstreetstiles = L.tileLayer(provider.connect, {
-	maxZoom: provider.maxZoom,
+var provider = CartoDB_Positron ;
+var lighttiles = L.tileLayer(provider.connect, {
 	attribution: provider.attribution,
-	id: provider.id,
-	tileSize: provider.tileSize,
-	zoomOffset: provider.zoomOffset
+	//id: provider.id,
+	//tileSize: provider.tileSize,
+	//zoomOffset: provider.zoomOffset
+	maxZoom: provider.maxZoom
 }) ;
+
+
 
 //  see https://leafletjs.com/examples/wms/wms.html
+
 var baseMaps = {
-	"רקע צבעוני": mapboxstreetstiles,
-	"רקע אפור": mapboxlighttiles
+	"רקע צבעוני": streetstiles,
+	"רקע אפור": lighttiles
 };
 
 // -----------------------------------------------
@@ -144,7 +193,7 @@ const lyr1 = {
 var map = L.map('map').setView([mapproperties.initial_lon, mapproperties.initial_lat], mapproperties.initial_zm);
 L.Control.boxzoom({ position:'topleft' }).addTo(map);
 
-mapboxlighttiles.addTo(map);
+lighttiles.addTo(map);  // start in light
 
 var overlayMaps = {};
 var sss = addlyr(map, lyr1, overlayMaps) ;

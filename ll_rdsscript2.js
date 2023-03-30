@@ -25,18 +25,6 @@ const mapproperties = {
 };
 
 
-const mapboxlight = {
-	connect: 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw',
-	maxZoom: 18,
-	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
-		'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-	id: 'mapbox/light-v9',
-	tileSize: 512,
-	zoomOffset: -1
-};
-const mapboxstreets = Object.assign({}, mapboxlight);
-mapboxstreets.id = 'mapbox/streets-v11';
-
 const osm = {
 		connect: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', 
 		maxZoom: 18
@@ -45,29 +33,46 @@ const osm_dark = {
 		connect: 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', 
 		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
         };
+		
+var CartoDB_Voyager = { // color
+	connect: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', 
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+	subdomains: 'abcd',
+	maxZoom: 20
+	};
 
-var provider = mapboxlight ;
-var mapboxlighttiles = L.tileLayer(provider.connect, {
-	maxZoom: provider.maxZoom,
+var CartoDB_Positron = {  // light
+	connect: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', 
+	//connect: 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+	subdomains: 'abcd',
+	maxZoom: 20
+	};
+		
+// -------------------------------------------------
+
+var provider = CartoDB_Voyager ;
+var streetstiles = L.tileLayer(provider.connect, {
 	attribution: provider.attribution,
-	id: provider.id,
-	tileSize: provider.tileSize,
-	zoomOffset: provider.zoomOffset
+	//id: provider.id,
+	//tileSize: provider.tileSize,
+	//zoomOffset: provider.zoomOffset,
+	maxZoom: provider.maxZoom
 }) ;
 
-var provider = mapboxstreets ;
-var mapboxstreetstiles = L.tileLayer(provider.connect, {
-	maxZoom: provider.maxZoom,
+var provider = CartoDB_Positron ;
+var lighttiles = L.tileLayer(provider.connect, {
 	attribution: provider.attribution,
-	id: provider.id,
-	tileSize: provider.tileSize,
-	zoomOffset: provider.zoomOffset
+	//id: provider.id,
+	//tileSize: provider.tileSize,
+	//zoomOffset: provider.zoomOffset,
+	maxZoom: provider.maxZoom
 }) ;
 
 //  see https://leafletjs.com/examples/wms/wms.html
 var baseMaps = {
-	"רקע צבעוני": mapboxstreetstiles,
-	"רקע אפור": mapboxlighttiles
+	"רקע צבעוני": streetstiles,
+	"רקע אפור": lighttiles
 };
 
 // -----------------------------------------------
@@ -263,7 +268,7 @@ map.createPane('front');
 map.getPane('front').style.zIndex = 1500;
 
 L.Control.boxzoom({ position:'topleft' }).addTo(map);
-mapboxlighttiles.addTo(map);
+lighttiles.addTo(map);
 
 var overlayMaps = {};
 var slyr1 = addlyr(map, lyr1, overlayMaps) ;
