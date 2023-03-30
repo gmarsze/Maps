@@ -90,6 +90,23 @@ var Esri_WorldGrayCanvas = {  // light
 	maxZoom: 16
 	};
 	
+var Esri_WorldTopoMap = {
+	connect: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', 
+	attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
+	};
+	
+var Esri_WorldImagery = {
+	connect: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', 
+	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+	};
+
+var piano = {
+	connect: 'https://{s}.piano.tiles.quaidorsay.fr/fr/{z}/{x}/{y}.png', 
+	attribution: 'Tiles <a href="https://github.com/tilery/pianoforte">PianoFr</a> | &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+	minZoom: 0,
+	maxZoom: 20
+	};
+	
 // ---------------------------------------------
 
 var provider = osm; // CartoDB_Voyager ;
